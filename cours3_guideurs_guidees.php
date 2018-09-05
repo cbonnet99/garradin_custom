@@ -91,14 +91,14 @@ $result = $file_db->query($query);
 									array_push($table_guide_pre, $row['nom']);
 								}
 								else {
-									array_push($table_guide, $row['nom'].' '.$cotis);
+									array_push($table_guide, $row['nom']);
 								}
 							}else{
 								if ($cotis=='<i></i>'){
 									array_push($table_guideur_pre, $row['nom']);
 								}
 								else {
-									array_push($table_guideur, $row['nom'].' '.$cotis);
+									array_push($table_guideur, $row['nom']);
 								}
 							}
 						}else{
@@ -107,14 +107,14 @@ $result = $file_db->query($query);
 									array_push($table_guideur_pre, $row['nom']);
 								}
 								else{
-									array_push($table_guideur, $row['nom'].' '.$cotis);
+									array_push($table_guideur, $row['nom']);
 								}
 							}else{
 								if ($cotis=='<i></i>'){
 									array_push($table_guide_pre, $row['nom']);
 								}
 								else {
-									array_push($table_guide, $row['nom'].' '.$cotis);
+									array_push($table_guide, $row['nom']);
 								}
 							}
 						}
