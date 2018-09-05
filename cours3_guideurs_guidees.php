@@ -3,10 +3,10 @@ $id_cours = $_GET['id_cours'];
 $query='SELECT id, date_inscription, nom, cours, guidage, guidage_exception FROM membres ORDER BY nom';
 //$query='SELECT membres.id, membres.date_inscription, membres.nom, membres.cours, membres.guidage, membres.guidage_exception, cotisations_membres.id_cotisation FROM membres,cotisations_membres  WHERE membres.id=cotisations_membres.id_membre ORDER by membres.nom';
 
-$nbr_guideur=0;
-$nbr_guide=0;
 $table_guide = array();
 $table_guideur = array();
+$table_guide_pre = array();
+$table_guideur_pre = array();
 
 
 
@@ -76,9 +76,6 @@ $result = $file_db->query($query);
 						}
 					}
 					$cotis = $cotis.'</i>';	
-					if ($cotis=='<i></i>'){
-						$cotis='<br><font color="red"><i>pas de forfait</i></font>';
-					}
 				
 					
 					//test est inscrit au cours
@@ -90,36 +87,56 @@ $result = $file_db->query($query);
 					
 						if ($row[guidage_exception] != null && $row[guidage_exception]==$cours){
 							if($row[guidage]=='guideur(se)'){
-								$nbr_guide = $nbr_guide+1;
-								array_push($table_guide, $row['nom'].' '.$cotis);
-								}else{
-								$nbr_guideur = $nbr_guideur+1;
-								array_push($table_guideur, $row['nom'].' '.$cotis);
+								if ($cotis=='<i></i>'){
+									array_push($table_guide_pre, $row['nom']);
+								}
+								else {
+									array_push($table_guide, $row['nom'].' '.$cotis);
+								}
+							}else{
+								if ($cotis=='<i></i>'){
+									array_push($table_guideur_pre, $row['nom']);
+								}
+								else {
+									array_push($table_guideur, $row['nom'].' '.$cotis);
+								}
 							}
 						}else{
 							if($row[guidage]=='guideur(se)'){
-								$nbr_guideur = $nbr_guideur+1;
-								array_push($table_guideur, $row['nom'].' '.$cotis);
-								}else{
-								$nbr_guide = $nbr_guide+1;
-								array_push($table_guide, $row['nom'].' '.$cotis);
+								if ($cotis=='<i></i>'){
+									array_push($table_guideur_pre, $row['nom']);
 								}
+								else{
+									array_push($table_guideur, $row['nom'].' '.$cotis);
+								}
+							}else{
+								if ($cotis=='<i></i>'){
+									array_push($table_guide_pre, $row['nom']);
+								}
+								else {
+									array_push($table_guide, $row['nom'].' '.$cotis);
+								}
+							}
 						}
 					}
 			}
 			?>
-
+			<?php
+				$counter_guideurs = 1;
+				$counter_guides = 1;
+			?>
 			<table CELLSPACING="20">
 				<tr>
-					<td><h3>Guideurs par ordre d'incription</h3></td>
-					<td><h3>Guidés par ordre d'inscription</h3></td>
+					<td><h3>Guideurs inscrits</h3></td>
+					<td><h3>Guidés inscrits</h3></td>
 				</tr>
 				<tr>
 					<td VALIGN=TOP>
 						<table border=1>
 						<?php
 						foreach($table_guideur as $value) {
-							echo '<tr><td>'.$value.'</td></tr>';
+							echo '<tr><td>'.$counter_guideurs.'. '.$value.'</td></tr>';
+							$counter_guideurs+=1;
 						}
 						?>
 						</table>
@@ -128,7 +145,40 @@ $result = $file_db->query($query);
 						<table border=1>
 						<?php
 						foreach($table_guide as $value) {
-							echo '<tr><td>'.$value.'</td></tr>';
+							echo '<tr><td>'.$counter_guides.'. '.$value.'</td></tr>';
+							$counter_guides+=1;
+						}
+						?>
+						</table>
+					</td>
+				</tr>	
+			</table>
+			<?php
+				$counter_guideurs_pre = 1;
+				$counter_guides_pre = 1;
+			?>
+			<table CELLSPACING="20">
+				<tr>
+					<td><h3>Guideurs pré-inscrits</h3></td>
+					<td><h3>Guidés pré-inscrits</h3></td>
+				</tr>
+				<tr>
+					<td VALIGN=TOP>
+						<table border=1>
+						<?php
+						foreach($table_guideur_pre as $value) {
+							echo '<tr><td>'.$counter_guideurs_pre.'. '.$value.'</td></tr>';
+							$counter_guideurs_pre+=1;
+						}
+						?>
+						</table>
+					</td>
+					<td VALIGN=TOP>
+						<table border=1>
+						<?php
+						foreach($table_guide_pre as $value) {
+							echo '<tr><td>'.$counter_guides_pre.'. '.$value.'</td></tr>';
+							$counter_guides_pre+=1;
 						}
 						?>
 						</table>
