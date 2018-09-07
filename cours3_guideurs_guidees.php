@@ -133,15 +133,15 @@ define(CATEGORY_ACCUEIL, 5);
 			?>
 			<table CELLSPACING="20">
 				<tr>
-					<td><h3>Guideurs inscrits</h3></td>
-					<td><h3>Guidés inscrits</h3></td>
+					<td width='350px'><h3>Guideurs inscrits</h3></td>
+					<td width='350px'><h3>Guidés inscrits</h3></td>
 				</tr>
 				<tr>
 					<td VALIGN=TOP>
 						<table border=1>
 						<?php
 						foreach($table_guideur as $value) {
-							echo '<tr><td>'.$counter_guideurs.'. '.$value.'</td></tr>';
+							echo "<tr><td>".$counter_guideurs.". ".$value."</td><td width='120px'></td></tr>";
 							$counter_guideurs+=1;
 						}
 						?>
@@ -151,7 +151,7 @@ define(CATEGORY_ACCUEIL, 5);
 						<table border=1>
 						<?php
 						foreach($table_guide as $value) {
-							echo '<tr><td>'.$counter_guides.'. '.$value.'</td></tr>';
+							echo "<tr><td>".$counter_guides.". ".$value."</td><td width='120px'></td></tr>";
 							$counter_guides+=1;
 						}
 						?>
@@ -165,15 +165,15 @@ define(CATEGORY_ACCUEIL, 5);
 			?>
 			<table CELLSPACING="20">
 				<tr>
-					<td><h3>Guideurs pré-inscrits</h3></td>
-					<td><h3>Guidés pré-inscrits</h3></td>
+					<td width='350px'><h3>Guideurs pré-inscrits</h3></td>
+					<td width='350px'><h3>Guidés pré-inscrits</h3></td>
 				</tr>
 				<tr>
 					<td VALIGN=TOP>
 						<table border=1>
 						<?php
 						foreach($table_guideur_pre as $value) {
-							echo '<tr><td>'.$counter_guideurs_pre.'. '.$value.'</td></tr>';
+							echo "<tr><td>".$counter_guideurs_pre.". ".$value."</td><td width='120px'></td></tr>";
 							$counter_guideurs_pre+=1;
 						}
 						?>
@@ -183,7 +183,7 @@ define(CATEGORY_ACCUEIL, 5);
 						<table border=1>
 						<?php
 						foreach($table_guide_pre as $value) {
-							echo '<tr><td>'.$counter_guides_pre.'. '.$value.'</td></tr>';
+							echo "<tr><td>".$counter_guides_pre.". ".$value."</td><td width='120px'></td></tr>";
 							$counter_guides_pre+=1;
 						}
 						?>
