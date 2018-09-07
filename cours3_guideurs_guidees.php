@@ -1,6 +1,6 @@
 <?php
 $id_cours = $_GET['id_cours'];
-$query='SELECT id, date_inscription, nom, cours, guidage, guidage_exception FROM membres ORDER BY nom';
+$query='SELECT id, id_categorie, date_inscription, nom, cours, guidage, guidage_exception FROM membres ORDER BY nom';
 //$query='SELECT membres.id, membres.date_inscription, membres.nom, membres.cours, membres.guidage, membres.guidage_exception, cotisations_membres.id_cotisation FROM membres,cotisations_membres  WHERE membres.id=cotisations_membres.id_membre ORDER by membres.nom';
 
 $table_guide = array();
@@ -54,7 +54,9 @@ $file_db = new PDO('sqlite:../association.sqlite');
 $file_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $result = $file_db->query($query);
 
-
+define(CATEGORY_MEMBRE_ACTIF, 1);
+define(CATEGORY_ADMIN, 3);
+define(CATEGORY_ACCUEIL, 5);
 
 ?>
      <html>
@@ -66,35 +68,39 @@ $result = $file_db->query($query);
           <p><h3><?php echo $table_cours[$id_cours] ?></h3></p>
 			<?php
 			foreach($result as $row) {
-					
-					$query2='SELECT id_membre, id_cotisation FROM cotisations_membres  WHERE id_membre='.$row[id];
-					$result2 = $file_db->query($query2);
-					$cotis='<i>';
-					foreach($result2 as $row2) {
-						if($row2[id_cotisation]<>2 and $row2[id_cotisation]<>3 and $row2[id_cotisation]<>1){
-							$cotis = $cotis.'<br>'.$table_cotis[$row2[id_cotisation]];
-						}
-					}
-					$cotis = $cotis.'</i>';	
 				
 					
 					//test est inscrit au cours
-					$tutu=decbin($row[cours]);
-					$tutu=str_pad($tutu, 17, "0", STR_PAD_LEFT);
-					$tutu = strrev($tutu);
+					$cours_binaire=decbin($row[cours]);
+					$cours_binaire=str_pad($cours_binaire, 17, "0", STR_PAD_LEFT);
+					$cours_binaire = strrev($cours_binaire);
+
+					$guidage_exception_binaire=decbin($row[guidage_exception]);
+					$guidage_exception_binaire=str_pad($guidage_exception_binaire, 17, "0", STR_PAD_LEFT);
+					$guidage_exception_binaire = strrev($guidage_exception_binaire);
+	
+					$utilisateur_inscrit_au_cours = (substr($cours_binaire, $id_cours, 1)=="1");
+					if ($utilisateur_inscrit_au_cours) {
+
+						$is_pre_inscrit = true;
+
+						if ($row[id_categorie]==CATEGORY_MEMBRE_ACTIF or $row[id_categorie]==CATEGORY_ADMIN or $row[id_categorie]==CATEGORY_ACCUEIL) {
+
+							$is_pre_inscrit = false;
+
+						}
 					
-					if(substr($tutu, $id_cours, 1)=="1"){
-					
-						if ($row[guidage_exception] != null && $row[guidage_exception]==$cours){
+						$utilisateur_exception_guidage_cours = (substr($guidage_exception_binaire, $id_cours, 1)=="1");
+						if ($utilisateur_exception_guidage_cours) {
 							if($row[guidage]=='guideur(se)'){
-								if ($cotis=='<i></i>'){
+								if ($is_pre_inscrit===true){
 									array_push($table_guide_pre, $row['nom']);
 								}
 								else {
 									array_push($table_guide, $row['nom']);
 								}
 							}else{
-								if ($cotis=='<i></i>'){
+								if ($is_pre_inscrit===true){
 									array_push($table_guideur_pre, $row['nom']);
 								}
 								else {
@@ -103,14 +109,14 @@ $result = $file_db->query($query);
 							}
 						}else{
 							if($row[guidage]=='guideur(se)'){
-								if ($cotis=='<i></i>'){
+								if ($is_pre_inscrit===true){
 									array_push($table_guideur_pre, $row['nom']);
 								}
 								else{
 									array_push($table_guideur, $row['nom']);
 								}
 							}else{
-								if ($cotis=='<i></i>'){
+								if ($is_pre_inscrit===true){
 									array_push($table_guide_pre, $row['nom']);
 								}
 								else {
