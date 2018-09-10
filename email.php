@@ -1,6 +1,7 @@
 <?php
 
-$query="SELECT email FROM membres";
+//on sélectionne uniquements les membres actifs (catégorie 1), les admins (catégorie 3) et les accueils (catégorie 5)
+$query="SELECT email FROM membres WHERE id_categorie IN (1, 3, 5) ORDER BY UPPER(email)";
 
 //recherche
 $file_db = new PDO('sqlite:../association.sqlite');
